@@ -15,5 +15,17 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static int kLeftRearPort = 234567;
+    public static int kRightRearPort = 6543;
+    public static int kLeftFrontPort = 41682;
+    public static int kRightFrontPort = 522752475;
+
+    public static final int kCurrentLimit = 40;
+
+    public static final boolean squareInputs = true;
+  }
+  public static final class OIConstants {
+    public static final int controller1 = 0;
+    public static final int controller2 = 1;
   }
 }
