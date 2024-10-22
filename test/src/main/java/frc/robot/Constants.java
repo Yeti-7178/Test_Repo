@@ -23,6 +23,8 @@ public final class Constants {
     public static final int kCurrentLimit = 40;
 
     public static final boolean squareInputs = true;
+
+    public static int xboxControllerPort = 5;
   }
   public static final class OIConstants {
     public static final int controller1 = 0;
