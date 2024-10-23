@@ -30,4 +30,11 @@ public final class Constants {
     public static final int controller1 = 0;
     public static final int controller2 = 1;
   }
+  public static final class ShooterConstants{
+    public static int kShooterPort = 522752475;
+  }
+  public static final class PneumaticsConstants{
+    public static int kCompressor = 522752475;
+
+  }
 }
