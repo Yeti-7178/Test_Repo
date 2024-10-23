@@ -5,16 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel;
-
-import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController; // motor manager we should use instead of other previous things. very useful
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
@@ -63,11 +54,10 @@ public class TankDrive extends SubsystemBase {
 
     }
 
-
     DifferentialDrive m_drive = new DifferentialDrive(m_Left1, m_Right1);
     public TankDrive() {
-        m_Right1.addFollower(m_Right2);
-        m_Left1.addFollower(m_Left2);
+        m_Right1.follow(m_Right2);
+        m_Left1.follow(m_Left2);
 
         m_Right1.restoreFactoryDefaults();
         m_Right2.restoreFactoryDefaults();
@@ -82,7 +72,6 @@ public class TankDrive extends SubsystemBase {
         m_Right1.setIdleMode(IdleMode.kBrake);
         m_Left1.setIdleMode(IdleMode.kBrake);
         m_Right2.setIdleMode(IdleMode.kBrake);
-        m_Left1.setIdleMode(IdleMode.kBrake);
 
         m_Right1.setInverted(true);
         m_Right2.setInverted(true);
