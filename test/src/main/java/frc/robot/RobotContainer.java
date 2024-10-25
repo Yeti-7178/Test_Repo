@@ -6,13 +6,24 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Solenoids;
 import frc.robot.subsystems.TankDrive;
+import pabeles.concurrency.ConcurrencyOps.NewInstance;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.TankConstants;
+import frc.robot.commands.Shooter.IndexShooter;
+import frc.robot.commands.Shooter.ShootCatapult;
+import frc.robot.commands.drive.DefaultDrive;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,14 +35,22 @@ public class RobotContainer {
 
   private final TankDrive m_chassisSubsystem = new TankDrive();
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final Solenoids m_solenoid = new Solenoids();
+  private final Intake m_intake = new Intake();
+  private final Shooter m_shooter = new Shooter();
   
   // Replace with CommandPS4Controller or CommandJoystick if needed
   XboxController m_driverController = new XboxController(OIConstants.controller1);
+  XboxController m_coDriverController = new XboxController(OIConstants.controller2);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    new DefaultDrive(
+            m_chassisSubsystem,
+            -m_driverController.getLeftY(),
+            -m_driverController.getRightY(),
+            true);
 
   }
 
@@ -46,6 +65,31 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    new JoystickButton(m_coDriverController,  Button.kB.value)
+    .onTrue(
+      new InstantCommand(Solenoids::shooterToggle)
+    );
+    new JoystickButton(m_coDriverController,  Button.kA.value)
+    .onTrue(
+      new InstantCommand(Solenoids::intakeToggle)
+    );
+    
+    new JoystickButton(m_coDriverController, Button.kX.value)
+    .onTrue(
+      new InstantCommand(() -> m_intake.runIntake(.5))
+    )
+    .onFalse(
+      new InstantCommand(() -> m_intake.runIntake(0))
+
+    );
+    new JoystickButton(m_coDriverController, Button.kY.value)
+    .onTrue(
+      new IndexShooter(m_shooter, m_intake, .75)
+    );
+    new JoystickButton(m_coDriverController, Button.kRightBumper.value)
+    .onTrue(
+      new ShootCatapult(m_shooter, 1)
+    );
     
   }
 

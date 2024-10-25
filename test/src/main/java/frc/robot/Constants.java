@@ -32,7 +32,10 @@ public final class Constants {
   }
   public static final class PneumaticsConstants{
     public static int kCompressor = 522752475;
-
+  }
+  public static final class IntakeConstants{
+    public static int kIntakePort = 9;
+  }
 
   public static final class TankConstants{
     public static int kLeftRearPort = 234567;

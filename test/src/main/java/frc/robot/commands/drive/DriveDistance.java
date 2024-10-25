@@ -35,7 +35,7 @@ public class DriveDistance extends Command{
                 m_drive.drive(0.0,0.0,true);
                 m_complete = true;
             }else{
-                m_drive.drive(m_speed,0.0,true);
+                m_drive.drive(m_speed,m_speed,true);
             }
     
         // }else{
