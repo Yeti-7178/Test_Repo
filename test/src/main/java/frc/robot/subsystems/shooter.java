@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -11,8 +13,8 @@ import frc.robot.Constants.ShooterConstants;
 
 
 public class Shooter extends SubsystemBase {
-    DigitalInput m_limitSwitch = new DigitalInput(3);
-    CANSparkMax m_shooterMotor = new CANSparkMax(ShooterConstants.kShooterPort, MotorType.kBrushless);
+    DigitalInput m_limitSwitch = new DigitalInput(0);
+    CANSparkMax m_shooterMotor = new CANSparkMax(ShooterConstants.kShooterPort, MotorType.kBrushed);
     public Shooter(){ 
         m_shooterMotor.restoreFactoryDefaults();
         
@@ -20,7 +22,6 @@ public class Shooter extends SubsystemBase {
         m_shooterMotor.setSmartCurrentLimit(OperatorConstants.kCurrentLimit);
         
         m_shooterMotor.setIdleMode(IdleMode.kBrake);
-        
 
     }
     public boolean getLimit(){
@@ -28,5 +29,9 @@ public class Shooter extends SubsystemBase {
     }
     public void runShooter(double speed){
         m_shooterMotor.set(speed);
+    }
+    @Override
+    public void periodic() {
+        SmartDashboard.putBoolean("Limit", getLimit());
     }
 }

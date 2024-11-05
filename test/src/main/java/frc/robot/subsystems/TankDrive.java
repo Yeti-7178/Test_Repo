@@ -4,8 +4,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.CANSparkLowLevel;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
@@ -32,6 +36,9 @@ public class TankDrive extends SubsystemBase {
 
     public double rightInches() {
         return getInches(m_EncoderRight1.getPosition());
+    }
+    public double getAvgEncoder(){
+        return (m_EncoderRight1.getPosition() + m_EncoderLeft1.getPosition()) /2 ;
     }
 
     public double getHeadingDeg() {
@@ -73,25 +80,24 @@ public class TankDrive extends SubsystemBase {
         m_Left1.setIdleMode(IdleMode.kBrake);
         m_Right2.setIdleMode(IdleMode.kBrake);
 
-        m_Right1.setInverted(true);
-        m_Right2.setInverted(true);
+        m_Right1.setInverted(false);
+        m_Right2.setInverted(false);
+
+        m_Left1.setInverted(true);
+        m_Left2.setInverted(true);
+
+        
+
     }
 
-    public void drive(double leftSpeed, double rightSpeed, boolean b){
+    public void drive(Double leftSpeed, Double rightSpeed, boolean b){
         m_drive.tankDrive( leftSpeed , rightSpeed, b);
     }
 
-    public void setBrakeMode(){
-        m_Left1.setIdleMode(IdleMode.kBrake);
-        m_Left2.setIdleMode(IdleMode.kBrake);
-        m_Right1.setIdleMode(IdleMode.kBrake);
-        m_Right2.setIdleMode(IdleMode.kBrake);
-    }
-    public void setCoastMode(){
-        m_Left1.setIdleMode(IdleMode.kCoast);
-        m_Left2.setIdleMode(IdleMode.kCoast);
-        m_Right1.setIdleMode(IdleMode.kCoast);
-        m_Right2.setIdleMode(IdleMode.kCoast);
+   
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Rotations", getInches(getAvgEncoder()));
     }
     
 }

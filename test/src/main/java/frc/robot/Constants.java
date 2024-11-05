@@ -14,34 +14,34 @@ package frc.robot;
  */
 public final class Constants {
   public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
     
 
     public static final int kCurrentLimit = 40;
 
     public static final boolean squareInputs = true;
 
-    public static int xboxControllerPort = 5;
+    
   }
   public static final class OIConstants {
     public static final int controller1 = 0;
     public static final int controller2 = 1;
   }
   public static final class ShooterConstants{
-    public static int kShooterPort = 522752475;
+    public static int kShooterPort = 5;
   }
   public static final class PneumaticsConstants{
-    public static int kCompressor = 522752475;
+    public static int kCompressor = 4;
   }
   public static final class IntakeConstants{
-    public static int kIntakePort = 9;
+    public static int kIntakePort = 14;
   }
 
   public static final class TankConstants{
-    public static int kLeftRearPort = 234567;
-    public static int kRightRearPort = 6543;
-    public static int kLeftFrontPort = 41682;
-    public static int kRightFrontPort = 522752475;
+    public static int kLeftRearPort = 1;
+    public static int kRightRearPort = 18;
+    public static int kLeftFrontPort = 19;
+    public static int kRightFrontPort = 20;
 
   }
 }
+/* */

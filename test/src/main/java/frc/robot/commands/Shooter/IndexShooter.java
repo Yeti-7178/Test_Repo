@@ -1,28 +1,33 @@
 package frc.robot.commands.Shooter;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Solenoids;
 
 public class IndexShooter extends Command{
     Shooter m_shoot;
-    Intake m_intake;
+    Solenoids m_solenoids;
     double m_speed;
     boolean m_complete;
-    public IndexShooter(Shooter shoot, Intake intake ,double speed){
+    public IndexShooter(Shooter shoot,Solenoids solenoids, double d){
         this.m_shoot = shoot;
-        this.m_intake = intake;
-        this.m_speed = speed;
+        this.m_solenoids = solenoids;
+        this.m_speed = d;
 
-        addRequirements(shoot, intake);
+
+        addRequirements(shoot);
     }
     @Override
     public void initialize() {
         m_complete = false;
-        m_intake.runIntake(.75);
+
     }
     @Override
     public void execute() {
+
         if(m_shoot.getLimit() == false){
             m_shoot.runShooter(m_speed);
         }
@@ -34,7 +39,6 @@ public class IndexShooter extends Command{
     @Override
     public void end(boolean interrupted) {
         m_shoot.runShooter(0);
-        m_intake.runIntake(0);
     }
     @Override
     public boolean isFinished() {

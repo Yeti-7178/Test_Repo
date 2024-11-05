@@ -8,12 +8,12 @@ import frc.robot.subsystems.TankDrive;
 
 public class DefaultDrive extends Command {
     private final TankDrive m_drive;
-    private final Double m_leftSpeed;
-    private final Double m_rightRotation;
+    private final DoubleSupplier m_leftSpeed;
+    private final DoubleSupplier m_rightRotation;
     public final boolean m_joyInput;
 
     
-    public DefaultDrive(TankDrive subsystem, Double leftSpeed, double rightSpeed, Boolean joyInput){
+    public DefaultDrive(TankDrive subsystem, DoubleSupplier leftSpeed, DoubleSupplier rightSpeed, Boolean joyInput){
         m_drive = subsystem;
         m_leftSpeed = leftSpeed;
         m_rightRotation = rightSpeed;
@@ -23,6 +23,6 @@ public class DefaultDrive extends Command {
 
     @Override
     public void execute(){
-        m_drive.drive(m_leftSpeed, m_rightRotation, m_joyInput);
+        m_drive.drive(m_leftSpeed.getAsDouble(), m_rightRotation.getAsDouble(), m_joyInput);
     }
 }

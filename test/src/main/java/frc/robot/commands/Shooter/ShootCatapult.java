@@ -18,7 +18,7 @@ public class ShootCatapult extends Command{
     }
     @Override
     public void execute() {
-        if(m_shoot.getLimit() == true){
+        if(m_shoot.getLimit() == true  ){
             m_shoot.runShooter(m_speed);
         }
         else{

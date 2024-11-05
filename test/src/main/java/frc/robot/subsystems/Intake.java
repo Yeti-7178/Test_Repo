@@ -11,7 +11,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class Intake extends SubsystemBase{
-    CANSparkMax m_shooterMotor = new CANSparkMax(IntakeConstants.kIntakePort, MotorType.kBrushless);
+    CANSparkMax m_shooterMotor = new CANSparkMax(IntakeConstants.kIntakePort, MotorType.kBrushed);
     public Intake(){ 
         m_shooterMotor.restoreFactoryDefaults();
         

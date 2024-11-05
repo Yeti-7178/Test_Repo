@@ -21,13 +21,10 @@ public class DriveDistance extends Command{
     @Override
     public void initialize(){
         m_complete = false;
-        start_encoders = m_drive.getDistanceTraveled();
+        start_encoders = m_drive.getAvgEncoder();
     }
 
-    @Override
-    public void end(boolean interrupted){
-        m_drive.drive(0.0, 0.0, false);
-    }
+ 
 
     @Override
     public void execute(){
@@ -50,7 +47,13 @@ public class DriveDistance extends Command{
     }
 
     @Override
+    public void end(boolean interrupted){
+        m_drive.drive(0.0, 0.0, false);
+    }
+
+    @Override
     public boolean isFinished(){
         return m_complete;
     }
+    
 }

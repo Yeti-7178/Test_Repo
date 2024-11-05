@@ -11,9 +11,14 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Solenoids;
 import frc.robot.subsystems.TankDrive;
 import pabeles.concurrency.ConcurrencyOps.NewInstance;
+
+import java.util.Timer;
+
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -23,7 +28,9 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.TankConstants;
 import frc.robot.commands.Shooter.IndexShooter;
 import frc.robot.commands.Shooter.ShootCatapult;
+import frc.robot.commands.auton.Auton1;
 import frc.robot.commands.drive.DefaultDrive;
+import frc.robot.commands.drive.DriveDistance;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,8 +43,13 @@ public class RobotContainer {
   private final TankDrive m_chassisSubsystem = new TankDrive();
   // The robot's subsystems and commands are defined here...
   private final Solenoids m_solenoid = new Solenoids();
-  private final Intake m_intake = new Intake();
+  // private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
+  private Timer m_time = new Timer();
+  
+
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+
   
   // Replace with CommandPS4Controller or CommandJoystick if needed
   XboxController m_driverController = new XboxController(OIConstants.controller1);
@@ -46,12 +58,17 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    new DefaultDrive(
+    
+    configureBindings();
+    m_chassisSubsystem.setDefaultCommand(new DefaultDrive(
             m_chassisSubsystem,
-            -m_driverController.getLeftY(),
-            -m_driverController.getRightY(),
-            true);
-
+            () -> m_driverController.getLeftY(),
+            () -> m_driverController.getRightY(),
+            true));
+      m_solenoid.intakeToggle();
+    
+    // m_chooser.setDefaultOption("Move back", new Auton1(m_chassisSubsystem,  new DefaultDrive(m_chassisSubsystem, null, null, null)));
+    SmartDashboard.putData(m_chooser);
   }
 
   /**
@@ -65,31 +82,44 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new JoystickButton(m_coDriverController,  Button.kB.value)
+    // new JoystickButton(m_coDriverController,  Button.kB.value)
+    // .onTrue(
+    //   // new InstantCommand(Solenoids::shooterToggle)
+
+    // );
+    new JoystickButton(m_coDriverController,  Button.kLeftBumper.value)
     .onTrue(
-      new InstantCommand(Solenoids::shooterToggle)
-    );
-    new JoystickButton(m_coDriverController,  Button.kA.value)
-    .onTrue(
-      new InstantCommand(Solenoids::intakeToggle)
+        new InstantCommand(m_solenoid::intakeToggle)
     );
     
-    new JoystickButton(m_coDriverController, Button.kX.value)
-    .onTrue(
-      new InstantCommand(() -> m_intake.runIntake(.5))
-    )
-    .onFalse(
-      new InstantCommand(() -> m_intake.runIntake(0))
-
-    );
-    new JoystickButton(m_coDriverController, Button.kY.value)
-    .onTrue(
-      new IndexShooter(m_shooter, m_intake, .75)
-    );
     new JoystickButton(m_coDriverController, Button.kRightBumper.value)
     .onTrue(
-      new ShootCatapult(m_shooter, 1)
+      new InstantCommand(m_solenoid::shooterToggle)
     );
+    
+    new JoystickButton(m_coDriverController, Button.kB.value)
+    .onTrue(
+      new IndexShooter(m_shooter, m_solenoid ,.5)
+      // new InstantCommand(()->m_shooter.runShooter(.5))
+    );
+    // .onFalse(
+    //   // new IndexShooter(m_shooter, m_intake, m_solenoid ,.75)
+    //   // new InstantCommand(()->m_shooter.runShooter(0))
+    // );
+    new JoystickButton(m_coDriverController, Button.kA.value)
+    .onTrue(
+      new ShootCatapult(m_shooter, .75)
+    );
+    // .onFalse(
+    //   new InstantCommand(()->m_intake.runIntake(0))
+    // );
+    // new JoystickButton(m_coDriverController, Button.kX.value)
+    // .onTrue(
+    //   new InstantCommand(()->m_intake.runIntake(-.5))
+    // )
+    // .onFalse(
+    //   new InstantCommand(()->m_intake.runIntake(0))
+    // );
     
   }
 
