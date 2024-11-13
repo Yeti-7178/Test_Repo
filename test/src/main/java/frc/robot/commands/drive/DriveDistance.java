@@ -1,7 +1,8 @@
 package frc.robot.commands.drive;
 
+
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.TankConstants;
 import frc.robot.subsystems.TankDrive;
 
 public class DriveDistance extends Command{
@@ -21,18 +22,21 @@ public class DriveDistance extends Command{
     @Override
     public void initialize(){
         m_complete = false;
-        start_encoders = m_drive.getAvgEncoder();
+        start_encoders = m_drive.getAverageEncoderDistanceInches();
     }
 
- 
+    @Override
+    public void end(boolean interrupted){
+        m_drive.drive(0.0, 0.0, false);
+    }
 
     @Override
     public void execute(){
-            if(Math.abs(m_drive.getDistanceTraveled()-start_encoders)>=m_distance){
-                m_drive.drive(0.0,0.0,true);
+            if(Math.abs(m_drive.getAverageEncoderDistanceInches()-start_encoders)>=m_distance){
+                m_drive.drive(0.0,0.0,false);
                 m_complete = true;
             }else{
-                m_drive.drive(m_speed,m_speed,true);
+                m_drive.drive(m_speed,m_speed,false);
             }
     
         // }else{
@@ -44,11 +48,6 @@ public class DriveDistance extends Command{
         //     }
     
         // }
-    }
-
-    @Override
-    public void end(boolean interrupted){
-        m_drive.drive(0.0, 0.0, false);
     }
 
     @Override

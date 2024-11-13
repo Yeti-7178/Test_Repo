@@ -41,6 +41,7 @@ public final class Constants {
     public static int kRightRearPort = 18;
     public static int kLeftFrontPort = 19;
     public static int kRightFrontPort = 20;
+    public static final double kEncoderConversionFactor = 6 * Math.PI / 9.52;
 
   }
 }
